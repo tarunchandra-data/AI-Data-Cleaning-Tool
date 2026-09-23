@@ -5,5 +5,5 @@ numpy
 plotly
 openpyxl
 scikit-learn
-statsmodelsgunicorn
+statsmodels
 gunicorn
