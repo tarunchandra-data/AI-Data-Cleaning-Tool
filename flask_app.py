@@ -6,6 +6,23 @@ import os
 import json
 
 app = Flask(__name__)
+@app.route("/robots.txt")
+def robots_txt():
+    return """User-agent: *
+Allow: /
+
+Sitemap: https://ai-data-cleaning-tool-b4d6.onrender.com/sitemap.xml
+""", 200, {"Content-Type": "text/plain"}
+    
+@app.route("/sitemap.xml")
+def sitemap_xml():
+    return """<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+    <url>
+        <loc>https://ai-data-cleaning-tool-b4d6.onrender.com/</loc>
+    </url>
+</urlset>
+""", 200, {"Content-Type": "application/xml"}
 app.secret_key = os.environ.get("FLASK_SECRET_KEY")
 
 UPLOAD_FOLDER = "uploads"
