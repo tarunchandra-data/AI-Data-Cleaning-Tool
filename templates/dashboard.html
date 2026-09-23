@@ -533,6 +533,109 @@
                 font-size: 25px;
             }
         }
+        .profile-photo {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    object-fit: cover;
+    display: block;
+    margin: 0 auto 15px;
+}
+
+/* ================================
+   MEMBER PROFILE CARD
+   ================================ */
+
+.member-card {
+    width: 100%;
+    box-sizing: border-box;
+    background: #ffffff;
+    border: 1px solid #e5e7eb;
+    border-radius: 20px;
+    padding: 28px 32px;
+    margin-top: 20px;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.06);
+}
+
+.member-profile {
+    display: flex;
+    align-items: center;
+    gap: 28px;
+}
+
+.member-photo {
+    width: 120px;
+    height: 120px;
+    min-width: 120px;
+    border-radius: 50%;
+    object-fit: cover;
+    object-position: center;
+    display: block;
+    border: 4px solid #ffffff;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
+}
+
+.member-info {
+    flex: 1;
+}
+
+.member-info h3 {
+    margin: 0 0 8px 0;
+    font-size: 28px;
+    font-weight: 700;
+    color: #1f2937;
+}
+
+.member-role {
+    margin: 0 0 8px 0;
+    font-size: 18px;
+    font-weight: 600;
+    color: #2563eb;
+}
+
+.member-project {
+    display: block;
+    font-size: 15px;
+    color: #6b7280;
+    line-height: 1.5;
+}
+
+
+/* Mobile responsive */
+@media (max-width: 600px) {
+
+    .member-card {
+        padding: 24px 20px;
+    }
+
+    .member-profile {
+        flex-direction: column;
+        text-align: center;
+        gap: 16px;
+    }
+
+    .member-photo {
+        width: 110px;
+        height: 110px;
+        min-width: 110px;
+    }
+
+    .member-info h3 {
+        font-size: 24px;
+    }
+
+    .member-role {
+        font-size: 17px;
+    }
+
+    .member-project {
+        font-size: 14px;
+    }
+}
+
+
+
+
     </style>
 </head>
 
@@ -1086,26 +1189,25 @@
 
                 <div class="member-card">
 
-                    <div class="member-avatar">
-                        👨‍💻
-                    </div>
+    <div class="member-profile">
+        <img
+            src="{{ url_for('static', filename='images/profile.jpg') }}"
+            alt="Tarun Chandra"
+            class="member-photo"
+        >
 
-                    <div class="member-info">
+        <div class="member-info">
+            <h3>Tarun Chandra</h3>
 
-                        <h3>Tarun Chandra</h3>
+            <p class="member-role">Project Developer</p>
 
-                        <p>Project Developer</p>
+            <span class="member-project">
+                AI Data Cleaning &amp; Analysis Tool
+            </span>
+        </div>
+    </div>
 
-                        <span>
-                            AI Data Cleaning & Analysis Tool
-                        </span>
-
-                    </div>
-
-                </div>
-
-            </div>
-
+</div>
         </div>
 
     </div>
