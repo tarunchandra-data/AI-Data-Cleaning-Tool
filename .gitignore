@@ -30,3 +30,16 @@ app_backup.py
 # Temporary files
 *.tmp
 *.log
+# Uploaded and locally generated data
+uploads/*
+!uploads/.gitkeep
+history.json
+members.json
+
+# Environment secrets
+.env
+.env.*
+!.env.example
+
+# Deployment/runtime files
+instance/

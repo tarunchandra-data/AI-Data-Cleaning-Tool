@@ -1,0 +1,1114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>AI Data Cleaning Tool</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: Arial, Helvetica, sans-serif;
+        }
+
+        body {
+            background: #f4f6f9;
+            color: #1f2937;
+        }
+
+        /* ================= SIDEBAR ================= */
+
+        .sidebar {
+            position: fixed;
+            left: 0;
+            top: 0;
+            width: 250px;
+            height: 100vh;
+            background: #111827;
+            color: white;
+            padding: 25px 18px;
+            overflow-y: auto;
+        }
+
+        .logo {
+            font-size: 22px;
+            font-weight: bold;
+            margin-bottom: 35px;
+            padding-left: 10px;
+        }
+
+        .logo span {
+            color: #60a5fa;
+        }
+
+        .menu {
+            display: block;
+            text-decoration: none;
+            color: #d1d5db;
+            padding: 13px 15px;
+            border-radius: 10px;
+            margin-bottom: 8px;
+            transition: 0.2s;
+        }
+
+        .menu:hover {
+            background: #1f2937;
+            color: white;
+        }
+
+        .menu.active {
+            background: #2563eb;
+            color: white;
+        }
+
+        /* ================= MAIN ================= */
+
+        .main {
+            margin-left: 250px;
+            padding: 35px;
+        }
+
+        .header {
+            margin-bottom: 30px;
+        }
+
+        .header h1 {
+            font-size: 32px;
+            margin-bottom: 8px;
+        }
+
+        .header p {
+            color: #6b7280;
+            font-size: 15px;
+        }
+
+        /* ================= CARDS ================= */
+
+        .cards {
+            display: grid;
+            grid-template-columns: repeat(4, minmax(0, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .card {
+            background: white;
+            padding: 22px;
+            border-radius: 15px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.06);
+            border: 1px solid #e5e7eb;
+            overflow-wrap: anywhere;
+        }
+
+        .card-title {
+            color: #6b7280;
+            font-size: 14px;
+            margin-bottom: 10px;
+        }
+
+        .card-value {
+            font-size: 30px;
+            font-weight: bold;
+            color: #111827;
+        }
+
+        .card-subtitle {
+            font-size: 12px;
+            color: #9ca3af;
+            margin-top: 7px;
+        }
+
+        /* ================= SECTIONS ================= */
+
+        .section {
+            background: white;
+            padding: 25px;
+            border-radius: 15px;
+            margin-bottom: 25px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+            border: 1px solid #e5e7eb;
+        }
+
+        .section h2 {
+            margin-bottom: 8px;
+            font-size: 21px;
+        }
+
+        .section-description {
+            color: #6b7280;
+            margin-bottom: 20px;
+            font-size: 14px;
+            line-height: 1.5;
+        }
+
+        /* ================= UPLOAD ================= */
+
+        .upload-box {
+            border: 2px dashed #cbd5e1;
+            border-radius: 12px;
+            padding: 30px;
+            text-align: center;
+            background: #f8fafc;
+        }
+
+        .upload-box input {
+            margin: 15px 0;
+            max-width: 100%;
+        }
+
+        .button {
+            display: inline-block;
+            border: none;
+            background: #2563eb;
+            color: white;
+            padding: 11px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+            text-decoration: none;
+            transition: 0.2s;
+        }
+
+        .button:hover {
+            background: #1d4ed8;
+        }
+
+        .button.green {
+            background: #16a34a;
+        }
+
+        .button.green:hover {
+            background: #15803d;
+        }
+
+        /* ================= ALERT ================= */
+
+        .alert {
+            background: #fee2e2;
+            color: #991b1b;
+            padding: 14px 18px;
+            border-radius: 10px;
+            margin-bottom: 25px;
+        }
+
+        .success {
+            background: #dcfce7;
+            color: #166534;
+            padding: 14px 18px;
+            border-radius: 10px;
+            margin-bottom: 25px;
+        }
+
+        /* ================= SNAPSHOT ================= */
+
+        .snapshot {
+            display: grid;
+            grid-template-columns: repeat(4, minmax(0, 1fr));
+            gap: 15px;
+        }
+
+        .snapshot-item {
+            background: #f8fafc;
+            padding: 18px;
+            border-radius: 10px;
+            border: 1px solid #e5e7eb;
+            overflow-wrap: anywhere;
+        }
+
+        .snapshot-item h3 {
+            font-size: 13px;
+            color: #6b7280;
+            margin-bottom: 8px;
+        }
+
+        .snapshot-item p {
+            font-size: 24px;
+            font-weight: bold;
+        }
+
+        /* ================= TABLE ================= */
+
+        .table-container {
+            overflow-x: auto;
+            width: 100%;
+        }
+
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
+            font-size: 14px;
+        }
+
+        .data-table th {
+            background: #111827;
+            color: white;
+            padding: 12px;
+            text-align: left;
+        }
+
+        .data-table td {
+            padding: 11px;
+            border-bottom: 1px solid #e5e7eb;
+        }
+
+        .data-table tr:hover {
+            background: #f8fafc;
+        }
+
+        /* ================= ANALYSIS ================= */
+
+        .analysis-grid {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 18px;
+            margin-top: 20px;
+        }
+
+        .analysis-card {
+            background: #f8fafc;
+            border: 1px solid #e5e7eb;
+            border-radius: 14px;
+            padding: 20px;
+            transition: 0.25s;
+            overflow-wrap: anywhere;
+        }
+
+        .analysis-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.08);
+        }
+
+        .analysis-card h3 {
+            font-size: 15px;
+            color: #6b7280;
+            margin-bottom: 10px;
+        }
+
+        .analysis-card p,
+        .analysis-card .average {
+            font-size: 28px;
+            font-weight: bold;
+            color: #111827;
+        }
+
+        .analysis-card .label {
+            font-size: 12px;
+            color: #9ca3af;
+            margin-top: 5px;
+        }
+
+        .analysis-card small {
+            display: block;
+            margin-top: 6px;
+            color: #9ca3af;
+        }
+
+        .analysis-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 25px;
+        }
+
+        .analysis-table th {
+            background: #111827;
+            color: white;
+            padding: 12px;
+            text-align: left;
+        }
+
+        .analysis-table td {
+            padding: 12px;
+            border-bottom: 1px solid #e5e7eb;
+        }
+
+        .analysis-table tr:hover {
+            background: #f8fafc;
+        }
+
+        /* ================= AI RECOMMENDATIONS ================= */
+
+        .recommendations-grid {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .recommendation-card {
+            background: #ffffff;
+            border: 1px solid #e5e7eb;
+            border-radius: 16px;
+            padding: 20px;
+            transition: 0.25s;
+        }
+
+        .recommendation-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.08);
+        }
+
+        .recommendation-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 14px;
+        }
+
+        .recommendation-icon {
+            width: 45px;
+            height: 45px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #eff6ff;
+            border-radius: 12px;
+            font-size: 22px;
+            flex-shrink: 0;
+        }
+
+        .recommendation-title {
+            font-size: 16px;
+            font-weight: bold;
+            color: #111827;
+        }
+
+        .recommendation-text {
+            color: #6b7280;
+            font-size: 14px;
+            line-height: 1.6;
+            margin-bottom: 14px;
+        }
+
+        /* Priority badges */
+
+        .priority-badge {
+            display: inline-block;
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 11px;
+            font-weight: bold;
+        }
+
+        .priority-badge.high {
+            background: #fee2e2;
+            color: #b91c1c;
+        }
+
+        .priority-badge.medium {
+            background: #fef3c7;
+            color: #92400e;
+        }
+
+        .priority-badge.good {
+            background: #dcfce7;
+            color: #166534;
+        }
+
+        /* ================= CLEANED ================= */
+
+        .cleaned-box {
+            background: #ecfdf5;
+            border: 1px solid #bbf7d0;
+            padding: 20px;
+            border-radius: 12px;
+        }
+
+        .cleaned-box h3 {
+            color: #166534;
+            margin-bottom: 10px;
+        }
+
+        .cleaned-box p {
+            color: #166534;
+            margin-bottom: 15px;
+        }
+
+        /* ================= EMPTY ================= */
+
+        .empty {
+            text-align: center;
+            padding: 35px;
+            color: #6b7280;
+            background: #f8fafc;
+            border-radius: 12px;
+        }
+
+        /* ================= MEMBERS ================= */
+
+        .members-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 20px;
+        }
+
+        .member-card {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            background: #f8fafc;
+            border: 1px solid #e5e7eb;
+            border-radius: 12px;
+            padding: 20px;
+        }
+
+        .member-avatar {
+            width: 55px;
+            height: 55px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #eff6ff;
+            border-radius: 50%;
+            font-size: 28px;
+            flex-shrink: 0;
+        }
+
+        .member-info h3 {
+            margin-bottom: 6px;
+            font-size: 16px;
+        }
+
+        .member-info p {
+            color: #2563eb;
+            font-size: 14px;
+            margin-bottom: 6px;
+        }
+
+        .member-info span {
+            color: #6b7280;
+            font-size: 12px;
+        }
+
+        /* ================= RESPONSIVE ================= */
+
+        @media (max-width: 1100px) {
+            .cards,
+            .snapshot {
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+            }
+
+            .analysis-grid {
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+            }
+        }
+
+        @media (max-width: 750px) {
+            .sidebar {
+                position: relative;
+                width: 100%;
+                height: auto;
+            }
+
+            .main {
+                margin-left: 0;
+                padding: 20px;
+            }
+
+            .cards,
+            .snapshot,
+            .analysis-grid,
+            .recommendations-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .header h1 {
+                font-size: 27px;
+            }
+        }
+
+        @media (max-width: 450px) {
+            .main {
+                padding: 14px;
+            }
+
+            .section {
+                padding: 18px;
+            }
+
+            .card-value {
+                font-size: 25px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- ================= SIDEBAR ================= -->
+
+    <div class="sidebar">
+
+        <div class="logo">
+            🤖 AI <span>Data Cleaner</span>
+        </div>
+
+        <a href="/" class="menu active">
+            🏠 Dashboard
+        </a>
+
+        <a href="#dataset" class="menu">
+            📁 Dataset Cleaner
+        </a>
+
+        <a href="#analysis" class="menu">
+            📊 Analysis
+        </a>
+
+        <a href="#recommendations" class="menu">
+            🤖 AI Recommendations
+        </a>
+
+        <a href="#history" class="menu">
+            🕒 History
+        </a>
+
+        <a href="#members" class="menu">
+            👥 Members
+        </a>
+
+        <!-- ADMIN LOGIN LINK -->
+        <a href="/admin-login" class="menu">
+            🔐 Admin Login
+        </a>
+
+    </div>
+
+
+    <!-- ================= MAIN ================= -->
+
+    <div class="main">
+
+        <!-- HEADER -->
+
+        <div class="header">
+            <h1>Dashboard</h1>
+
+            <p>
+                AI-powered data cleaning, analysis and quality insights.
+            </p>
+        </div>
+
+
+        <!-- ================= TOP CARDS ================= -->
+
+        <div class="cards">
+
+            <div class="card">
+                <div class="card-title">
+                    📁 Datasets
+                </div>
+
+                <div class="card-value">
+                    {{ dataset_count }}
+                </div>
+
+                <div class="card-subtitle">
+                    Uploaded datasets
+                </div>
+            </div>
+
+
+            <div class="card">
+                <div class="card-title">
+                    🧹 Cleaned Files
+                </div>
+
+                <div class="card-value">
+                    {{ cleaned_count }}
+                </div>
+
+                <div class="card-subtitle">
+                    Successfully cleaned
+                </div>
+            </div>
+
+
+            <div class="card">
+                <div class="card-title">
+                    📊 Analyses
+                </div>
+
+                <div class="card-value">
+                    {{ analysis_count }}
+                </div>
+
+                <div class="card-subtitle">
+                    Dataset analyses performed
+                </div>
+            </div>
+
+
+            <div class="card">
+                <div class="card-title">
+                    👥 Members
+                </div>
+
+                <div class="card-value">
+                    1
+                </div>
+
+                <div class="card-subtitle">
+                    Active project members
+                </div>
+            </div>
+
+        </div>
+
+
+        <!-- ================= ERROR ================= -->
+
+        {% if error %}
+
+        <div class="alert">
+            ⚠️ {{ error }}
+        </div>
+
+        {% endif %}
+
+
+        <!-- ================= UPLOAD ================= -->
+
+        <div class="section" id="dataset">
+
+            <h2>📁 Upload Dataset</h2>
+
+            <p class="section-description">
+                Upload a CSV or Excel file to analyze and clean your dataset.
+            </p>
+
+            <div class="upload-box">
+
+                <form method="POST" enctype="multipart/form-data">
+
+                    <p>Select your dataset</p>
+
+                    <input
+                        type="file"
+                        name="dataset"
+                        accept=".csv,.xlsx"
+                        required
+                    >
+
+                    <br>
+
+                    <button type="submit" class="button">
+                        🚀 Analyze Dataset
+                    </button>
+
+                </form>
+
+            </div>
+
+        </div>
+
+
+        {% if data %}
+
+        <!-- ================= DATA QUALITY ================= -->
+
+        <div class="section">
+
+            <h2>🛡️ Data Quality Snapshot</h2>
+
+            <p class="section-description">
+                Quality overview of the uploaded dataset.
+            </p>
+
+            <div class="snapshot">
+
+                <div class="snapshot-item">
+                    <h3>Dataset</h3>
+
+                    <p style="font-size:16px;">
+                        {{ data.filename }}
+                    </p>
+                </div>
+
+
+                <div class="snapshot-item">
+                    <h3>Rows</h3>
+
+                    <p>
+                        {{ data.rows }}
+                    </p>
+                </div>
+
+
+                <div class="snapshot-item">
+                    <h3>Columns</h3>
+
+                    <p>
+                        {{ data.columns }}
+                    </p>
+                </div>
+
+
+                <div class="snapshot-item">
+                    <h3>Quality Score</h3>
+
+                    <p>
+                        {{ data.quality }}%
+                    </p>
+                </div>
+
+
+                <div class="snapshot-item">
+                    <h3>Missing Values</h3>
+
+                    <p>
+                        {{ data.missing }}
+                    </p>
+                </div>
+
+
+                <div class="snapshot-item">
+                    <h3>Duplicate Rows</h3>
+
+                    <p>
+                        {{ data.duplicates }}
+                    </p>
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- ================= DATA PREVIEW ================= -->
+
+        <div class="section">
+
+            <h2>👀 Dataset Preview</h2>
+
+            <p class="section-description">
+                First 10 rows of your uploaded dataset.
+            </p>
+
+            <div class="table-container">
+                {{ data.preview | safe }}
+            </div>
+
+        </div>
+
+
+        <!-- ================= CLEAN DATA ================= -->
+
+        <div class="section">
+
+            <h2>🧹 Clean Dataset</h2>
+
+            <p class="section-description">
+                Remove duplicate rows and handle missing values automatically.
+            </p>
+
+            <form method="POST" action="/clean">
+
+                <button type="submit" class="button green">
+                    ✨ Clean Dataset
+                </button>
+
+            </form>
+
+        </div>
+
+
+        <!-- ================= CLEANED RESULT ================= -->
+
+        {% if data.cleaned %}
+
+        <div class="section">
+
+            <div class="cleaned-box">
+
+                <h3>
+                    ✅ Dataset Cleaned Successfully
+                </h3>
+
+                <p>
+                    {{ data.duplicates_removed }}
+                    duplicate rows were removed.
+                </p>
+
+                <p>
+                    Cleaned dataset contains
+                    {{ data.cleaned_rows }}
+                    rows.
+                </p>
+
+                <a
+                    href="/download/{{ data.cleaned_filename }}"
+                    class="button green"
+                >
+                    ⬇️ Download Cleaned Dataset
+                </a>
+
+            </div>
+
+        </div>
+
+        {% endif %}
+
+
+        <!-- ================= ANALYSIS ================= -->
+
+        <div class="section" id="analysis">
+
+            <h2>📊 Dataset Analysis</h2>
+
+            <p class="section-description">
+                Statistical summary of numeric columns.
+            </p>
+
+            {% if data.analysis %}
+
+            <div class="analysis-grid">
+
+                {% for item in data.analysis %}
+
+                <div class="analysis-card">
+
+                    <h3>
+                        {{ item.column }}
+                    </h3>
+
+                    <p class="average">
+                        {{ item.average }}
+                    </p>
+
+                    <div class="label">
+                        Average value
+                    </div>
+
+                </div>
+
+                {% endfor %}
+
+            </div>
+
+
+            <div class="table-container">
+
+                <table class="analysis-table">
+
+                    <thead>
+                        <tr>
+                            <th>Column</th>
+                            <th>Count</th>
+                            <th>Average</th>
+                            <th>Minimum</th>
+                            <th>Maximum</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+
+                        {% for item in data.analysis %}
+
+                        <tr>
+                            <td>{{ item.column }}</td>
+                            <td>{{ item.count }}</td>
+                            <td>{{ item.average }}</td>
+                            <td>{{ item.minimum }}</td>
+                            <td>{{ item.maximum }}</td>
+                        </tr>
+
+                        {% endfor %}
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+            {% else %}
+
+            <div class="empty">
+                No numeric columns available for analysis.
+            </div>
+
+            {% endif %}
+
+        </div>
+
+
+        <!-- ================= AI RECOMMENDATIONS ================= -->
+
+        <div class="section" id="recommendations">
+
+            <h2>🤖 AI Cleaning Recommendations</h2>
+
+            <p class="section-description">
+                Intelligent recommendations based on your dataset quality
+                and structure.
+            </p>
+
+            {% if data.recommendations %}
+
+            <div class="recommendations-grid">
+
+                {% for recommendation in data.recommendations %}
+
+                <div class="recommendation-card">
+
+                    <div class="recommendation-header">
+
+                        <div class="recommendation-icon">
+                            {{ recommendation.icon }}
+                        </div>
+
+                        <div class="recommendation-title">
+                            {{ recommendation.title }}
+                        </div>
+
+                    </div>
+
+                    <div class="recommendation-text">
+                        {{ recommendation.text }}
+                    </div>
+
+                    <span class="priority-badge {{ recommendation.priority_class }}">
+                        {{ recommendation.priority }}
+                    </span>
+
+                </div>
+
+                {% endfor %}
+
+            </div>
+
+            {% else %}
+
+            <div class="empty">
+                🤖 No recommendations available for this dataset.
+            </div>
+
+            {% endif %}
+
+        </div>
+
+
+        {% else %}
+
+        <!-- ================= EMPTY DASHBOARD ================= -->
+
+        <div class="section">
+
+            <div class="empty">
+
+                <h2>
+                    🚀 Start Your Data Analysis
+                </h2>
+
+                <p style="margin-top:10px;">
+                    Upload a CSV or Excel dataset above to see
+                    quality metrics, analysis and cleaning recommendations.
+                </p>
+
+            </div>
+
+        </div>
+
+        {% endif %}
+
+
+        <!-- ================= HISTORY ================= -->
+
+        <div class="section" id="history">
+
+            <h2>🕒 History</h2>
+
+            <p class="section-description">
+                Recent dataset analysis and cleaning activity.
+            </p>
+
+            {% if history %}
+
+            <div class="table-container">
+
+                <table class="analysis-table">
+
+                    <thead>
+                        <tr>
+                            <th>Dataset</th>
+                            <th>Action</th>
+                            <th>Status</th>
+                            <th>Time</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+
+                        {% for item in history|reverse %}
+
+                        <tr>
+                            <td>{{ item.filename }}</td>
+                            <td>{{ item.action }}</td>
+                            <td>{{ item.status }}</td>
+                            <td>{{ item.time }}</td>
+                        </tr>
+
+                        {% endfor %}
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+            {% else %}
+
+            <div class="empty">
+                🕒 No processing history yet.
+            </div>
+
+            {% endif %}
+
+        </div>
+
+
+        <!-- ================= MEMBERS ================= -->
+
+        <div class="section" id="members">
+
+            <h2>👥 Members</h2>
+
+            <p class="section-description">
+                Project team members and their roles.
+            </p>
+
+            <div class="members-grid">
+
+                <!-- Member 1 -->
+
+                <div class="member-card">
+
+                    <div class="member-avatar">
+                        👨‍💻
+                    </div>
+
+                    <div class="member-info">
+
+                        <h3>Tarun Chandra</h3>
+
+                        <p>Project Developer</p>
+
+                        <span>
+                            AI Data Cleaning & Analysis Tool
+                        </span>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</body>
+</html>

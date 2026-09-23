@@ -176,7 +176,7 @@ if page == "🏠 Dashboard":
 
     st.subheader("🧹 Cleaning Summary")
    
-    summary
+
     # Quick Actions
     st.subheader("⚡ Quick Actions")
 
@@ -860,7 +860,6 @@ with c5:
         unsafe_allow_html=True
     )
 
-
 # ============================================================
 # DATA PREVIEW
 # ============================================================
@@ -1043,6 +1042,29 @@ st.dataframe(
 # ============================================================
 # BEFORE VS AFTER
 # ============================================================
+with c3:
+    st.markdown(
+        f"""
+        <div class="metric-card">
+            <div class="metric-icon">⚠️</div>
+            <div class="metric-title">Missing Values</div>
+            <div class="metric-value">{missing_count:,}</div>
+        </div>
+        """,
+        unsafe_allow_html=True
+    )
+
+with c4:
+    st.markdown(
+        f"""
+      div class="metric-card">
+      <div class="metric-icon">🔁</div>
+    <div class="metric-title">Duplicates</div>
+       <div class="metric-value">{duplicate_count:,}</div>
+        </div>
+        """,
+        unsafe_allow_html=True
+    )
 
 st.markdown(
     '<div class="section-title">📋 Before vs After Cleaning</div>',
